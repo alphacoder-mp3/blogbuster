@@ -5,8 +5,8 @@ export const Quote = () => {
         <div className="max-w-lg">
           <div className="text-gray-500 dark:text-gray-400 text-3xl font-bold">
             {' '}
-            "The customer service I received was exceptional. The support team
-            went above and beyond to address my concerns."{' '}
+            &quot;The customer service I received was exceptional. The support
+            team went above and beyond to address my concerns.&quot;{' '}
           </div>
           <div className="max-w-full text-gray-500 dark:text-gray-400 text-xl font-semibold mt-4">
             Julies Winfield
