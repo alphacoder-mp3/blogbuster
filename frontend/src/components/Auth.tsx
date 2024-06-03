@@ -1,8 +1,6 @@
 'use server';
-import { Label } from '@/components/ui/label';
-import { Input } from '@/components/ui/input';
+import { ClientAuth } from './ClientAuth';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 
 export const Auth = ({ type }: { type: 'signup' | 'signin' }) => {
   return (
@@ -24,31 +22,7 @@ export const Auth = ({ type }: { type: 'signup' | 'signin' }) => {
           </div>
         )}
       </div>
-      <div className="space-y-2">
-        {type === 'signup' && (
-          <div className="space-y-2">
-            <Label htmlFor="email">Username</Label>
-            <Input id="email" placeholder="Enter your username" type="text" />
-          </div>
-        )}
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" placeholder="johndoe@example.com" type="email" />
-        </div>
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <Label htmlFor="password">Password</Label>
-            <Link className="ml-auto inline-block text-sm underline" href="#">
-              Forgot Password?
-            </Link>
-          </div>
-          <Input id="password" type="password" />
-        </div>
-        <Button className="w-full">
-          {' '}
-          {type === 'signin' ? 'Sign In' : 'Sign Up'}
-        </Button>
-      </div>
+      <ClientAuth type={type} />
     </div>
   );
 };

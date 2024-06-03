@@ -14,8 +14,8 @@ export default function SignUpLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>{children}</body>
-    </html>
+    <section lang="en" suppressHydrationWarning>
+      <div className={inter.className}>{children}</div>
+    </section>
   );
 }

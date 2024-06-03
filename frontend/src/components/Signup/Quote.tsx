@@ -13,7 +13,7 @@ export const Quote = () => {
           </div>
 
           <div className="max-w-full text-slate-400 dark:text-neutral-500 text-md font-semibold">
-            CEO | Neo Vim Corp
+            CEO, Acme Corp
           </div>
         </div>
       </div>
