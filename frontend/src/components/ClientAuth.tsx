@@ -5,8 +5,12 @@ import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { FormEvent, useState, ChangeEvent } from 'react';
 import { SigninInput, SignupInput } from '@blazedglimmer/common';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/navigation';
+import { Toaster, toast } from 'sonner';
 
 export const ClientAuth = ({ type }: { type: 'signup' | 'signin' }) => {
+  const router = useRouter();
   const [formData, setFormData] = useState<SigninInput | SignupInput>({
     username: '',
     name: '',
@@ -30,13 +34,21 @@ export const ClientAuth = ({ type }: { type: 'signup' | 'signin' }) => {
           'Content-Type': 'application/json',
         },
       });
-
+      const data = await response.json();
       if (response.ok) {
-        // Handle success (e.g., show a success message)
-        console.log('Form submitted successfully');
+        // Assuming the JWT token is returned in the response as data.token
+        const token = data.jwt;
+
+        // Set the token in a cookie
+        Cookies.set('token', token, { expires: 7 }); // The token will expire in 7 days
+        // router.push('/');
+        setTimeout(() => router.push('/'), 1000);
+        toast.success('Logged in successfully');
+        // console.log('Form submitted successfully', data);
       } else {
         // Handle error (e.g., show an error message)
         console.error('Error submitting form');
+        toast.error(data.error);
       }
     } catch (error) {
       console.error('Error submitting form:', error);
@@ -104,6 +116,7 @@ export const ClientAuth = ({ type }: { type: 'signup' | 'signin' }) => {
         {type === 'signin' ? 'Sign In' : 'Sign Up'}
       </Button>
       <p aria-live="polite" className="sr-only" role="status"></p>
+      <Toaster richColors />
     </form>
   );
 };

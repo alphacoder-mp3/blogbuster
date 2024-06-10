@@ -26,7 +26,7 @@ userRouter.post('/signup', async c => {
   try {
     const user = await prisma.user.create({
       data: {
-        email: body.email,
+        username: body.username,
         password: body.password,
         name: body.name,
       },
@@ -34,8 +34,23 @@ userRouter.post('/signup', async c => {
     const jwt = await sign({ id: user.id }, c.env.JWT_SECRET);
     return c.json({ jwt });
   } catch (e) {
-    c.status(403);
-    return c.json({ error: 'error while signing up' });
+    if (e instanceof Error && 'code' in e) {
+      if (e.code === 'P2002') {
+        // Unique constraint violation
+        c.status(409); // Conflict status code
+        return c.json({ error: 'User already exists' });
+      } else if (e.code === 'P5000') {
+        // Database connection issue
+        c.status(500); // Internal Server Error
+        return c.json({
+          error: 'Database connection error',
+          details: e.message,
+        });
+      }
+    }
+    console.error('Error during signup:', e); // Log the actual error for debugging
+    c.status(500); // Internal Server Error for other issues
+    return c.json({ error: 'Error while signing up', e, details: e.message });
   }
 });
 
@@ -54,7 +69,7 @@ userRouter.post('/signin', async c => {
   try {
     const user = await prisma.user.findUnique({
       where: {
-        email: body.email,
+        username: body.username,
         password: body.password,
       },
     });
