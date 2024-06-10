@@ -1,13 +1,20 @@
-import { NextResponse } from 'next/server';
-import type { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 
-export function middleware(request: NextRequest) {
-  console.log('check', request.nextUrl.pathname);
-  if (request.nextUrl.pathname.startsWith('/admin')) {
-    return NextResponse.redirect(new URL('/signin', request.url));
+export async function middleware(req: NextRequest) {
+  const token = req.cookies.get('token'); // Retrieve the token from the cookies
+
+  if (token) {
+    req.headers.set('Authorization', `Bearer ${token}`);
   }
 
-  if (request.nextUrl.pathname.startsWith('/dashboard')) {
-    return NextResponse.next();
-  }
+  return NextResponse.next({
+    request: {
+      headers: req.headers,
+    },
+  });
 }
+
+// Specify the routes where you want the middleware to run
+export const config = {
+  matcher: ['/api/v1/blog'],
+};
