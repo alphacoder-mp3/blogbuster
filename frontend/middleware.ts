@@ -4,7 +4,7 @@ export async function middleware(req: NextRequest) {
   const token = req.cookies.get('token'); // Retrieve the token from the cookies
 
   if (token) {
-    req.headers.set('Authorization', `Bearer ${token}`);
+    req.headers.set('Authorization', `${token}`);
   }
 
   return NextResponse.next({
