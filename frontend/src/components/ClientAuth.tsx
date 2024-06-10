@@ -19,13 +19,7 @@ export const ClientAuth = ({ type }: { type: 'signup' | 'signin' }) => {
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
-    // Assuming you have an API route at '/api/submitForm'
-    const formURL =
-      type === 'signin'
-        ? 'https://backend.forgodworksss.workers.dev/api/v1/user/signin'
-        : 'https://backend.forgodworksss.workers.dev/api/v1/user/signup';
-
+    const formURL = `${process.env.NEXT_PUBLIC_BASE_URL}/user/${type}`;
     try {
       const response = await fetch(formURL, {
         method: 'POST',
@@ -36,17 +30,11 @@ export const ClientAuth = ({ type }: { type: 'signup' | 'signin' }) => {
       });
       const data = await response.json();
       if (response.ok) {
-        // Assuming the JWT token is returned in the response as data.token
         const token = data.jwt;
-
-        // Set the token in a cookie
-        Cookies.set('token', token, { expires: 7 }); // The token will expire in 7 days
-        // router.push('/');
+        Cookies.set('token', token, { expires: 7 }); // Setting the token in cookie, The token will expire in 7 days
         setTimeout(() => router.push('/'), 1000);
         toast.success('Logged in successfully');
-        // console.log('Form submitted successfully', data);
       } else {
-        // Handle error (e.g., show an error message)
         console.error('Error submitting form');
         toast.error(data.error);
       }
